@@ -1,0 +1,37 @@
+{
+  "hosting": {
+    "public": "build",
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; style-src 'self' 'nonce-u8wa0Neh57TYB8PxN9TfgQ=='; script-src 'self' 'nonce-u8wa0Neh57TYB8PxN9TfgQ==' https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com; connect-src 'self' https://securetoken.googleapis.com https://www.googleapis.com https://us-central1-zebra-insight-test.cloudfunctions.net https://firestore.googleapis.com https://firebasestorage.googleapis.com https://identitytoolkit.googleapis.com wss://*.firebaseio.com; img-src 'self'; object-src 'none'"
+          },
+          { "key": "X-Frame-Options", "value": "deny" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "X-XSS-Protection", "value": "1; mode=block" },
+          { "key": "Expect-CT", "value": "max-age=86400" },
+          {
+            "key": "Strict-Transport-Security",
+            "value": "max-age=31536000; includeSubDomains"
+          }
+        ]
+      }
+    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
+  }
+}
