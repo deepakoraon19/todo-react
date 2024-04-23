@@ -16,7 +16,7 @@ function Todo() {
             let tasks = []
             p.forEach((doc) => {
                 let taskObj = doc.data()
-                tasks.push({ task: taskObj.task, isComplete: taskObj.isComplete, id: doc.id })
+                tasks.push({ value: taskObj.value, isComplete: taskObj.isComplete, id: doc.id })
             })
             setTaskList(tasks);
         });
@@ -40,12 +40,12 @@ function Todo() {
         }
     }
 
-    const toggleState = async (task) => {
+    const updateTask = async (task) => {
         try {
-            await setDoc(doc(db, 'ToDos', task.id), { ...task, isComplete: !task.isComplete }, { merge: true });
+            await setDoc(doc(db, 'ToDos', task.id), {...task }, { merge: true });
             let updated = taskList.map(p => {
                 if (p.id === task.id) {
-                    p.isComplete = !p.isComplete
+                    p = task
                     return p
                 }
                 return p;
@@ -58,9 +58,11 @@ function Todo() {
     }
 
     useEffect(() => {
-        getTasks()
-    }, [])
-
+        if (taskList.length === 0) {
+            console.log("Fetching")
+            getTasks()
+        }
+    })
 
     return (
         <Box
@@ -76,7 +78,7 @@ function Todo() {
         >
             <AddDialog addTask={(task) => addTask(task)}></AddDialog>
             <br />
-            <Tasks tasks={taskList} delete={deleteTask} toggleState={toggleState}></Tasks>
+            <Tasks tasks={taskList} deleteTask={deleteTask} updateTask={updateTask}></Tasks>
         </Box>
     )
 }
