@@ -7,6 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
 function Tasks({ tasks, deleteTask, updateTask }) {
     const [isEditMode, setIsEditMode] = useState(false)
     const [editID, setEditID] = useState('')
@@ -19,14 +20,17 @@ function Tasks({ tasks, deleteTask, updateTask }) {
     }
     const _updateTask = (t) => {
         updateTask({ ...t, value: taskField })
-        setIsEditMode(false)
-        setEditID('')
+        resetEditMode()
     }
     const toggleState = (task) => {
         updateTask({ ...task, isComplete: !task.isComplete })
+        resetEditMode()
+    }
+    const resetEditMode = () => {
         setIsEditMode(false)
         setEditID('')
     }
+    
     return (
         <>
             {tasks.map((task) =>
@@ -42,16 +46,24 @@ function Tasks({ tasks, deleteTask, updateTask }) {
                     <Box>
                         {
                             isEditMode === true && editID === task.id ?
-                                <IconButton aria-label="save" size="small" onClick={s => _updateTask(task)}>
-                                    <SaveIcon fontSize="inherit" />
-                                </IconButton>
-                                : <IconButton aria-label="update" size="small" onClick={s => editMode(task)} disabled={isEditMode}>
-                                    <ModeEditIcon fontSize="inherit" />
-                                </IconButton>
+                                <Box>
+                                    <IconButton aria-label="save" size="small" onClick={s => _updateTask(task)}>
+                                        <SaveIcon fontSize="inherit" />
+                                    </IconButton>
+                                    <IconButton aria-label="clear" size="small" onClick={s => resetEditMode()} >
+                                        <CloseIcon fontSize="inherit" />
+                                    </IconButton>
+                                </Box>
+                                :
+                                <Box>
+                                    <IconButton aria-label="update" size="small" onClick={s => editMode(task)} disabled={isEditMode}>
+                                        <ModeEditIcon fontSize="inherit" />
+                                    </IconButton>
+                                    <IconButton aria-label="delete" size="small" onClick={s => deleteTask(task.id)} disabled={isEditMode}>
+                                        <DeleteIcon fontSize="inherit" />
+                                    </IconButton>
+                                </Box>
                         }
-                        <IconButton aria-label="delete" size="small" onClick={s => deleteTask(task.id)} disabled={isEditMode}>
-                            <DeleteIcon fontSize="inherit" />
-                        </IconButton>
                     </Box>
                 </Box>
             )}
