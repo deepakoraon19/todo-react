@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AddDialog from '../Components/AddDialog';
 import Box from '@mui/material/Box';
 import Tasks from '../Components/Tasks';
 import app from '../config'
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc, query, where } from "firebase/firestore";
+import UserContext from '../Contexts/UserContext';
 
 
 function Todo() {
     const db = getFirestore(app)
     const toDoCollection = collection(db, 'ToDos')
     const [taskList, setTaskList] = useState([])
-
+    const { user } = useContext(UserContext)
     /**
      * The function `getTasks` retrieves tasks from a Firestore collection and updates the task list
      * state in a React component.
      */
     const getTasks = () => {
-        getDocs(collection(db, "ToDos")).then(p => {
+        getDocs(query(collection(db, "ToDos"), where("user", "==", user.uid))).then(p => {
             let tasks = []
-
             p.forEach((doc) => {
                 let taskObj = doc.data()
-                tasks.push({ value: taskObj.value, isComplete: taskObj.isComplete, id: doc.id })
+                tasks.push({ value: taskObj.value, isComplete: taskObj.isComplete, id: doc.id, user: taskObj.user })
             })
             setTaskList(tasks);
         });

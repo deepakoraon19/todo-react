@@ -5,27 +5,46 @@ import { auth } from "../config"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from "react-router-dom";
 import UserContext from '../Contexts/UserContext';
+import NotificationContext from '../Contexts/NotificationContext';
 
 function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isUser, setisUser] = useState(true)
     const navigate = useNavigate();
-    const {setUser} = useContext(UserContext)
+    const { setUser } = useContext(UserContext)
+    const { setshowNotification, setMsg } = useContext(NotificationContext)
+
+    const parseError = (error) => {
+        let msg = ""
+        switch (error) {
+            case "email":
+                msg = "Invalid Email"
+                break;
+            case "credential":
+                msg = "Invalid Password"
+                break;
+            default:
+                msg = "Something went wrong"
+        }
+        return msg
+    }
+
     const onSumbit = async (e) => {
         e.preventDefault();
         if (isUser) {
             await signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     const user = { uid: userCredential.user.uid, email: email };
-                    navigate("/todo")
                     localStorage.setItem("user", JSON.stringify(user))
                     setUser(user);
+                    setMsg(`Logged in as ${email}`)
+                    navigate("/todo")
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorCode, errorMessage)
+                    setMsg(parseError(error.code));
+                }).finally(() => {
+                    setshowNotification(true)
                 });
         } else {
             await createUserWithEmailAndPassword(auth, email, password)
@@ -33,13 +52,13 @@ function Login() {
                     const user = { uid: userCredential.user.uid, email: email };
                     localStorage.setItem("user", JSON.stringify(user))
                     setUser(user);
+                    setMsg(`Logged in as ${email}`)
                     navigate("/todo")
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorCode, errorMessage);
-                    // ..
+                    setMsg(parseError(error.code));
+                }).finally(() => {
+                    setshowNotification(true)
                 });
         }
     }

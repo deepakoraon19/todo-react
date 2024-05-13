@@ -8,21 +8,24 @@ import UserContext from '../Contexts/UserContext';
 import { auth } from '../config';
 import { signOut } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
+import NotificationContext from '../Contexts/NotificationContext';
 
 export default function Nav() {
     const { user, setUser } = useContext(UserContext)
     const navigate = useNavigate();
-
+    const { setMsg, setshowNotification } = useContext(NotificationContext)
     const handleLogin = () => {
         if (user) {
             signOut(auth).then(() => {
                 localStorage.clear()
                 setUser(null)
                 navigate("/");
-                console.log("Signed out successfully")
+                setMsg("Signed out successfully")
             }).catch((error) => {
-                // An error happened.
-            });
+                setMsg(error.code)
+            }).finally(() => {
+                setshowNotification(true)
+            });;
         }
     }
     return (

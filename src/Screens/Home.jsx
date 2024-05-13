@@ -5,16 +5,13 @@ import UserContext from "../Contexts/UserContext";
 
 
 function Home() {
-    const { setUser } = useContext(UserContext)
-    const [isLoggedIn, setisLoggedIn] = useState(false)
-    
+    const { user, setUser } = useContext(UserContext)
+
     const getUser = () => {
         let localUser = localStorage.getItem("user")
         if (localUser === null) {
-            setisLoggedIn(false);
         } else {
-            setisLoggedIn(true);
-            setUser("user", localUser)
+            setUser(JSON.parse(localUser))
         }
     }
     useEffect(() => {
@@ -23,7 +20,7 @@ function Home() {
 
     return (<>
         {
-            isLoggedIn ? <Todo></Todo> : <Login></Login>
+            user ? <Todo></Todo> : <Login></Login>
         }
     </>)
 }
