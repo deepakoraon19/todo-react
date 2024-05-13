@@ -11,7 +11,7 @@ function Login() {
     const [password, setPassword] = useState("")
     const [isUser, setisUser] = useState(true)
     const navigate = useNavigate();
-    const {user, setUser} = useContext(UserContext)
+    const {setUser} = useContext(UserContext)
     const onSumbit = async (e) => {
         e.preventDefault();
         if (isUser) {

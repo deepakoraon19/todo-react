@@ -7,7 +7,7 @@ import Nav from "./Components/Nav";
 import { useState } from "react";
 import UserContext from "./Contexts/UserContext";
 function App() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <div className="App">
