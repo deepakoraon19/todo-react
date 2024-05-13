@@ -28,7 +28,7 @@ function Todo() {
     }
 
     /**
-     * The `addTask` function asynchronously adds a task to a collection and updates the task list with the
+     * The `addTask` function asynchronously adds a task to a Firestore collection and updates the task list with the
      * new task.
      */
     const addTask = async (task) => {
@@ -41,7 +41,7 @@ function Todo() {
     }
 
     /**
-     * The `deleteTask` function deletes a task from a list and updates the state accordingly.
+     * The `deleteTask` function deletes a task from a Firestore collection and updates the state accordingly.
      */
     const deleteTask = async (taskId) => {
         try {
@@ -53,7 +53,7 @@ function Todo() {
     }
 
     /**
-     * The `updateTask` function updates a task in a list by replacing the existing task with a new one
+     * The `updateTask` function updates a task in a Firestore collection by replacing the existing task with a new one
      * based on the task ID.
      */
     const updateTask = async (task) => {
