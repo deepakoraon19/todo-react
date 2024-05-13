@@ -11,9 +11,14 @@ function Todo() {
     const toDoCollection = collection(db, 'ToDos')
     const [taskList, setTaskList] = useState([])
 
+    /**
+     * The function `getTasks` retrieves tasks from a Firestore collection and updates the task list
+     * state in a React component.
+     */
     const getTasks = () => {
         getDocs(collection(db, "ToDos")).then(p => {
             let tasks = []
+
             p.forEach((doc) => {
                 let taskObj = doc.data()
                 tasks.push({ value: taskObj.value, isComplete: taskObj.isComplete, id: doc.id })
@@ -22,6 +27,10 @@ function Todo() {
         });
     }
 
+    /**
+     * The `addTask` function asynchronously adds a task to a collection and updates the task list with the
+     * new task.
+     */
     const addTask = async (task) => {
         try {
             const doc = await addDoc(toDoCollection, task);
@@ -31,6 +40,9 @@ function Todo() {
         }
     }
 
+    /**
+     * The `deleteTask` function deletes a task from a list and updates the state accordingly.
+     */
     const deleteTask = async (taskId) => {
         try {
             await deleteDoc(doc(db, 'ToDos', taskId))
@@ -40,9 +52,13 @@ function Todo() {
         }
     }
 
+    /**
+     * The `updateTask` function updates a task in a list by replacing the existing task with a new one
+     * based on the task ID.
+     */
     const updateTask = async (task) => {
         try {
-            await setDoc(doc(db, 'ToDos', task.id), {...task }, { merge: true });
+            await setDoc(doc(db, 'ToDos', task.id), { ...task }, { merge: true });
             let updated = taskList.map(p => {
                 if (p.id === task.id) {
                     p = task
