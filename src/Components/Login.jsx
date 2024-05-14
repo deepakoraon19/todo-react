@@ -17,16 +17,10 @@ function Login() {
 
     const parseError = (error) => {
         let msg = ""
-        switch (error) {
-            case "email":
-                msg = "Invalid Email"
-                break;
-            case "credential":
-                msg = "Invalid Password"
-                break;
-            default:
-                msg = "Something went wrong"
-        }
+        console.log(error)
+        if (error.includes("email")) msg = "Invalid Email"
+        else if (error.includes("credential")) msg = "Invalid Password"
+        else msg = "Something went wrong"
         return msg
     }
 
@@ -78,7 +72,7 @@ function Login() {
             bgcolor="white"
             sx={{ pt: 7 }}>
             <Typography variant="h3" gutterBottom>{isUser ? "LOGIN" : "SIGN UP"}</Typography>
-            <TextField label="User Name" variant="standard" onChange={(p) => setEmail(p.target.value)}></TextField>
+            <TextField label="Email" variant="standard" onChange={(p) => setEmail(p.target.value)}></TextField>
             <TextField sx={{ my: 2 }} label="Password" variant="standard" onChange={(p) => setPassword(p.target.value)}></TextField>
             <Button sx={{ my: 1 }} color="secondary" variant="contained" onClick={(p) => { onSumbit(p) }}>
                 {isUser ? "LOGIN" : "SIGN UP"}

@@ -12,6 +12,7 @@ function Todo() {
     const toDoCollection = collection(db, 'ToDos')
     const [taskList, setTaskList] = useState([])
     const { user } = useContext(UserContext)
+
     /**
      * The function `getTasks` retrieves tasks from a Firestore collection and updates the task list
      * state in a React component.
@@ -82,7 +83,7 @@ function Todo() {
 
     return (
         <Box
-            height="100vh"
+            height="90vh"
             width="50vw"
             my={4}
             margin="auto"
